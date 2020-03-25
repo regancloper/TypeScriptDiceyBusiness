@@ -5,7 +5,7 @@ const DIE_SIDES: number = 6;
 // outlines Die class, which creates Die object
 class Die {
     value!: number;
-    div!: JQuery;
+    div!: JQuery<HTMLDivElement>;
 
     static Corral: Die[] = [];
 
@@ -24,23 +24,23 @@ class Die {
         this.addListeners();
         Die.Corral.push(this);
     }
-    roll() {
+    private roll(): void {
         this.value = Math.floor(Math.random() * (DIE_SIDES) + 1);
     }
-    reRoll() {
+    reRoll(): void {
         this.roll();
         this.div.text(this.value);
     }
-    deleteDie() {
+    private deleteDie(): void {
         this.div.remove();
-        let index: number = Die.Corral.indexOf(this);
+        let index = Die.Corral.indexOf(this);
         Die.Corral.splice(index, 1);
     }
-    addToScreen() {
+    private addToScreen(): void {
         this.div = $(`<div class="dice shadow">${this.value}</div>`);
         $('.die-container').append(this.div);
     }
-    addListeners() {
+    private addListeners(): void {
         this.div.click(() => this.reRoll());
         this.div.dblclick(() => this.deleteDie());
     }
@@ -50,7 +50,7 @@ class Die {
 $('#generate').click(() => new Die());
 
 // click listener for "Reroll" button
-$('#reroll').click(() => Die.Corral.forEach((val: Die) => val.reRoll()));
+$('#reroll').click(() => Die.Corral.forEach((val) => val.reRoll()));
 
 // click listener for "Sum Dice" button
 $('#sum').click(() => Die.sumAll());
